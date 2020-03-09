@@ -1,4 +1,4 @@
-package me.tangni.oneclick.gradleplugin.transforms
+package me.tangni.oneclick.gradleplugin.transforms.asm
 
 import me.tangni.oneclick.gradleplugin.utils.Logger
 import org.objectweb.asm.ClassVisitor

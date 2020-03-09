@@ -3,9 +3,10 @@ package me.tangni.oneclick.gradleplugin.transforms
 import com.android.build.api.transform.QualifiedContent
 import com.android.build.gradle.internal.pipeline.TransformManager
 import me.tangni.cybertron.Cybertron
+import me.tangni.oneclick.gradleplugin.transforms.asm.OneClickAsmClassEditor
 import org.gradle.api.Project
 
-class OneClickTransform(private val project: Project) : Cybertron(project, OneClickClassEditor()) {
+class OneClickTransform(private val project: Project) : Cybertron(project, OneClickAsmClassEditor()) {
 
     override fun getName(): String = "OneClick"
 

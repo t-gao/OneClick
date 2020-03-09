@@ -3,6 +3,7 @@ package me.tangni.cybertron
 import com.android.SdkConstants
 import com.android.build.api.transform.*
 import com.android.ide.common.internal.WaitableExecutor
+import me.tangni.cybertron.utils.ClassHelper
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOCase
 import org.apache.commons.io.filefilter.SuffixFileFilter
@@ -27,9 +28,22 @@ abstract class Cybertron(private val project: Project, private val classEditor: 
 //    override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
 //    }
 
+    private lateinit var transformInvocation: TransformInvocation
+    private var _classLoader: ClassLoader? = null
+
+    /**
+     * DO NOT access this before the transform() method is called
+     */
+    val classLoader: ClassLoader
+        get() = _classLoader?:ClassHelper.getClassLoader(project, transformInvocation).apply {
+            _classLoader = this
+        }
+
     override fun transform(transformInvocation: TransformInvocation) {
         val isIncremental = transformInvocation.isIncremental
 //        logger.i("transform begins, isIncremental: $isIncremental")
+
+        this.transformInvocation = transformInvocation
 
         val outputProvider = transformInvocation.outputProvider
         if (outputProvider == null) {
@@ -180,7 +194,7 @@ abstract class Cybertron(private val project: Project, private val classEditor: 
      */
     @Throws(IOException::class)
     private fun getEditedClassByteArray(inputStream: InputStream, fullQualifiedClassName: String): ByteArray? {
-        return classEditor.getEditedClassByteArray(inputStream, fullQualifiedClassName)
+        return classEditor.getEditedClassByteArray(this, inputStream, fullQualifiedClassName)
     }
 
 }
