@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "OneClick-MainActivity";
@@ -16,19 +17,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.button).setOnClickListener(this);
-        findViewById(R.id.button2).setOnClickListener(new MyAbstractClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "button2 onClick");
-            }
-        });
-//        findViewById(R.id.button2).setOnClickListener(new MyClickListener3());
-//        findViewById(R.id.button2).setOnClickListener(new MyAbstractClickListener2() {
+//        findViewById(R.id.button2).setOnClickListener(new MyAbstractClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                Log.d(TAG, "button2 onClick");
 //            }
 //        });
+//        findViewById(R.id.button2).setOnClickListener(new MyClickListener3());
+        findViewById(R.id.button2).setOnClickListener(new MyAbstractClickListener2() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "button2 onClick");
+                super.onClick(v);
+            }
+        });
     }
 
     @Override

@@ -6,7 +6,8 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.commons.AdviceAdapter
 
-class OneClickMethodVisitor(mv: MethodVisitor?,
+class OneClickMethodVisitor(private val className:String,
+                            mv: MethodVisitor?,
                             access: Int,
                             name: String?,
                             desc: String?) : AdviceAdapter(Opcodes.ASM5, mv, access, name, desc) {
@@ -18,9 +19,10 @@ class OneClickMethodVisitor(mv: MethodVisitor?,
      *     }
      */
     override fun onMethodEnter() {
-        Logger.i("OneClickMethodVisitor onMethodEnter")
+        Logger.lifecycle("OneClickMethodVisitor onMethodEnter, className: $className")
         mv.visitVarInsn(Opcodes.ALOAD, 1)
-        mv.visitMethodInsn(Opcodes.INVOKESTATIC, "me/tangni/oneclick/OneClick", "isFastClick", "(Landroid/view/View;)Z", false)
+        mv.visitLdcInsn(className)
+        mv.visitMethodInsn(Opcodes.INVOKESTATIC, "me/tangni/oneclick/OneClick", "isFastClick", "(Landroid/view/View;Ljava/lang/String;)Z", false)
         val nl1 = Label()
         mv.visitJumpInsn(Opcodes.IFEQ, nl1)
         val nl2 = Label()

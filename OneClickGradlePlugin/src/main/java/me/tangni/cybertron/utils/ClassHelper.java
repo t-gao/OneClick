@@ -79,7 +79,6 @@ public class ClassHelper {
         if (clazz == Object.class) return;
 
         if (clazz.isInterface()) {
-//            outInterfaces.add(clazz.getSuperclass().getTypeName());
             outInterfaces.add(clazz.getTypeName());
         } else {
             Class<?>[] itfs = clazz.getInterfaces();

@@ -17,26 +17,26 @@ class OneClickAsmClassEditor : CybertronClassEditor {
         val classReader = ClassReader(inputStream)
 
         val cn = classReader.className
-        Logger.i("getEditedClassByteArray of class $cn")
+        Logger.lifecycle("getEditedClassByteArray of class $cn")
 
         val clickListenerClassName = "android/view/View\$OnClickListener"
         var interesting = classReader.interfaces.contains(clickListenerClassName)
         if (interesting) {
-            Logger.i("$cn implements OnClickListener by itself!")
+            Logger.lifecycle("$cn implements OnClickListener by itself!")
         }
         if (!interesting) {
             val allInterfaces = ClassHelper.getAllInterfaces(cybertron.classLoader,
                     cn.replace(File.separatorChar, '.'))
             if (allInterfaces?.contains(clickListenerClassName.replace(File.separatorChar, '.')) == true) {
-                Logger.i("$cn is found interesting from it's superclasses, direct super: ${classReader.superName}")
+                Logger.lifecycle("$cn is found interesting from it's superclasses, direct super: ${classReader.superName}")
                 interesting = true
             }
         }
 
         return if (interesting) {
-            Logger.i("$cn is interesting!")
+            Logger.lifecycle("$cn is interesting!")
             val classWriter = ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-            val classVisitor = OneClickClassVisitor(classWriter)
+            val classVisitor = OneClickClassVisitor(cn, classWriter)
             classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES)
             classWriter.toByteArray()
         } else {
