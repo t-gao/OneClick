@@ -6,6 +6,8 @@ import com.android.build.api.transform.JarInput;
 import com.android.build.api.transform.TransformInput;
 import com.android.build.api.transform.TransformInvocation;
 import com.android.build.gradle.AppExtension;
+import com.android.build.gradle.BaseExtension;
+import com.android.build.gradle.LibraryExtension;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
@@ -57,11 +59,22 @@ public class ClassHelper {
      * ${ANDROID_HOME}/platforms/android-${compileSdkVersion}/android.jar
      */
     private static String getAndroidJarPath(@NonNull Project project) {
-        AppExtension appExtension = (AppExtension)project.getProperties().get("android");
-        String sdkDirectory = appExtension.getSdkDirectory().getAbsolutePath();
-        String compileSdkVersion = appExtension.getCompileSdkVersion();
-        sdkDirectory = sdkDirectory + File.separator + "platforms" + File.separator;
-        return sdkDirectory + compileSdkVersion + File.separator + "android.jar";
+//        AppExtension appExtension = (AppExtension)project.getProperties().get("android");
+        BaseExtension extension = project.getExtensions().findByType(AppExtension.class);
+        if (extension == null) {
+            extension = project.getExtensions().findByType(LibraryExtension.class);
+        }
+
+        if (extension == null) {
+            extension = project.getExtensions().findByType(BaseExtension.class);
+        }
+        if (extension != null) {
+            String sdkDirectory = extension.getSdkDirectory().getAbsolutePath();
+            String compileSdkVersion = extension.getCompileSdkVersion();
+            sdkDirectory = sdkDirectory + File.separator + "platforms" + File.separator;
+            return sdkDirectory + compileSdkVersion + File.separator + "android.jar";
+        }
+        return "";
     }
 
     public static Class<?> loadClass(@NonNull ClassLoader classLoader, @NonNull String className) {

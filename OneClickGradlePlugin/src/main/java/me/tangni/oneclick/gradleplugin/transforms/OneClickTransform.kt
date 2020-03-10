@@ -6,7 +6,8 @@ import me.tangni.cybertron.Cybertron
 import me.tangni.oneclick.gradleplugin.transforms.asm.OneClickAsmClassEditor
 import org.gradle.api.Project
 
-class OneClickTransform(private val project: Project) : Cybertron(project, OneClickAsmClassEditor()) {
+class OneClickTransform(private val project: Project, private val isLibrary: Boolean = false)
+    : Cybertron(project, OneClickAsmClassEditor()) {
 
     override fun getName(): String = "OneClick"
 

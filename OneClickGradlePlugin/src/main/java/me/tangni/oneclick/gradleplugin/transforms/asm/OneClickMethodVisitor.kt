@@ -14,7 +14,7 @@ class OneClickMethodVisitor(private val className:String,
 
     /**
      * insert below code at the beginning of the onClick(View v) method:
-     *     if (OneClick.isFastClick(v)) {
+     *     if (OneClick.isFastClick(v, "listenerClassName")) {
      *         return;
      *     }
      */
@@ -27,10 +27,8 @@ class OneClickMethodVisitor(private val className:String,
         mv.visitJumpInsn(Opcodes.IFEQ, nl1)
         val nl2 = Label()
         mv.visitLabel(nl2)
-//        mv.visitLineNumber(27, nl2)
         mv.visitInsn(Opcodes.RETURN)
         mv.visitLabel(nl1)
-//        mv.visitLineNumber(29, nl1)
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null)
     }
 

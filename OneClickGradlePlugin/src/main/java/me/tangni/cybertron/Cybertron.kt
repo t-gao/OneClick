@@ -14,19 +14,6 @@ import java.io.*
 abstract class Cybertron(private val project: Project, private val classEditor: CybertronClassEditor) : Transform() {
 
     private var waitableExecutor: WaitableExecutor = WaitableExecutor.useGlobalSharedThreadPool()
-//    private var logger: Logger = Logger.fromProject(project, "${project.displayName}-Cybertron-$name")
-
-//    override fun getName(): String {
-//    }
-//
-//    override fun getInputTypes(): MutableSet<QualifiedContent.ContentType> {
-//    }
-//
-//    override fun isIncremental(): Boolean {
-//    }
-//
-//    override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
-//    }
 
     private lateinit var transformInvocation: TransformInvocation
     private var _classLoader: ClassLoader? = null
@@ -91,7 +78,6 @@ abstract class Cybertron(private val project: Project, private val classEditor: 
                         }
                     }
                     Status.ADDED, Status.CHANGED -> {
-                        FileUtils.touch(destFile)
                         transformFile(inputFile, destFile, srcDirPath)
                     }
                     Status.NOTCHANGED -> {
@@ -152,6 +138,8 @@ abstract class Cybertron(private val project: Project, private val classEditor: 
 
     @Throws(IOException::class)
     private fun transformFile(inputFile: File, outputFile: File, srcBaseDir: String) {
+        FileUtils.touch(outputFile)
+
         val fullQualifiedClassName = inputFile.absolutePath.replace(srcBaseDir, "").replace(File.separator, "")
         if (willEditClass(fullQualifiedClassName)) {
 
