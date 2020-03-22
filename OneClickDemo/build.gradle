@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'onclick-gradle-plugin'
 
+OneClick {
+    clickInterval = 900L
+}
+
 buildscript {
     repositories {
         mavenLocal()
@@ -24,11 +28,35 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("../OneClickDemo.keystore")
+            storePassword "voltron"
+            keyAlias "voltron"
+            keyPassword "voltron"
+            v2SigningEnabled true
+        }
+
+        release {
+            storeFile file("../OneClickDemo.keystore")
+            storePassword "voltron"
+            keyAlias "voltron"
+            keyPassword "voltron"
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
 }

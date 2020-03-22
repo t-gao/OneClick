@@ -13,10 +13,14 @@ class OneClickPlugin : Plugin<Project> {
         Logger.init(project)
         Logger.i("OneClickPlugin apply(), project: ${project.displayName}")
 
-        project.extensions.findByType(AppExtension::class.java)?.apply {
-            registerTransform(OneClickTransform(project, false))
-        }?:project.extensions.findByType(LibraryExtension::class.java)?.apply {
-            registerTransform(OneClickTransform(project, true))
+        project.extensions.let {
+            it.findByType(AppExtension::class.java)?.apply {
+                it.create("OneClick", OneClickExtension::class.java)
+                registerTransform(OneClickTransform(project, false))
+            }?:it.findByType(LibraryExtension::class.java)?.apply {
+                it.create("OneClick", OneClickExtension::class.java)
+                registerTransform(OneClickTransform(project, true))
+            }
         }
     }
 }

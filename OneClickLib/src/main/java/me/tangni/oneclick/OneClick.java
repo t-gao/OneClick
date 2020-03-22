@@ -24,12 +24,17 @@ public class OneClick {
     private static View.OnAttachStateChangeListener onAttachStateChangeListener = new View.OnAttachStateChangeListener() {
         @Override
         public void onViewAttachedToWindow(View v) {
-            Log.d(TAG, "onViewAttachedToWindow: " + v.toString());
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "onViewAttachedToWindow: " + v.toString());
+            }
         }
 
         @Override
         public void onViewDetachedFromWindow(View v) {
-            Log.d(TAG, "onViewDetachedFromWindow: " + v.toString());
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "onViewDetachedFromWindow: " + v.toString());
+            }
+
             v.removeOnAttachStateChangeListener(onAttachStateChangeListener);
             observedSet.remove(v);
             clickTimeStamps.remove(v);
@@ -41,14 +46,29 @@ public class OneClick {
      * @return true if this is a fast click
      */
     public static boolean isFastClick(View v, @NonNull String listenerClassName) {
-        Log.d(TAG, "onFastClick, viewId: " + v.getId() + ", view: " + v + ", listenerClassName: " + listenerClassName);
+        return isFastClick(v, listenerClassName, CLICK_INTERVAL);
+    }
+
+    /**
+     *
+     * @return true if this is a fast click
+     */
+    public static boolean isFastClick(View v, @NonNull String listenerClassName, long clickIntervalMillis) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "onFastClick, viewId: " + v.getId() + ", view: " + v + ", listenerClassName: " + listenerClassName + ", clickInterval: " + clickIntervalMillis);
+        }
+
         boolean isFastClick = false;
         if (v != null) {
             long lastTime = getLastClickTime(v, listenerClassName);
             long now = SystemClock.elapsedRealtime();
             long diff = now - lastTime;
-            Log.d(TAG, "  lastTime: " + lastTime + ", now: " + now + ", diff: " + diff);
-            if ( diff < CLICK_INTERVAL ) {
+
+            if (BuildConfig.DEBUG) {
+                Log.d(TAG, "  lastTime: " + lastTime + ", now: " + now + ", diff: " + diff);
+            }
+
+            if ( diff < clickIntervalMillis ) {
                 isFastClick = true;
             }
         }
@@ -64,7 +84,6 @@ public class OneClick {
     }
 
     private static long getLastClickTime(@NonNull View v, @NonNull String listenerClassName) {
-        Log.d(TAG, "getLastClickTime");
         boolean observed = observedSet.contains(v);
         if (!observed) {
             observedSet.add(v);

@@ -5,7 +5,7 @@ import java.io.InputStream
 interface CybertronClassEditor {
 
     /**
-     * return the edited class's byte array, or null this class is not edited
+     * return the edited class's byte array, or null if this class is not edited
      *
      * @param cybertron
      * @param inputStream

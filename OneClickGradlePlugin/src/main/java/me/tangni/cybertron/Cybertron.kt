@@ -11,12 +11,16 @@ import org.apache.commons.io.filefilter.TrueFileFilter
 import org.gradle.api.Project
 import java.io.*
 
-abstract class Cybertron(private val project: Project, private val classEditor: CybertronClassEditor) : Transform() {
+abstract class Cybertron(private val project: Project, private var classEditor: CybertronClassEditor? = null) : Transform() {
 
     private var waitableExecutor: WaitableExecutor = WaitableExecutor.useGlobalSharedThreadPool()
 
     private lateinit var transformInvocation: TransformInvocation
     private var _classLoader: ClassLoader? = null
+
+    fun registerCybertronClassEditor(classEditor: CybertronClassEditor?) {
+        this.classEditor = classEditor
+    }
 
     /**
      * DO NOT access this before the transform() method is called
@@ -28,13 +32,11 @@ abstract class Cybertron(private val project: Project, private val classEditor: 
 
     override fun transform(transformInvocation: TransformInvocation) {
         val isIncremental = transformInvocation.isIncremental
-//        logger.i("transform begins, isIncremental: $isIncremental")
 
         this.transformInvocation = transformInvocation
 
         val outputProvider = transformInvocation.outputProvider
         if (outputProvider == null) {
-//            logger.e("outputProvider null!")
             return
         }
 
@@ -131,9 +133,6 @@ abstract class Cybertron(private val project: Project, private val classEditor: 
 
     @Throws(IOException::class)
     private fun transformJar(src: File, dest: File, status: Status) {
-//        waitableExecutor.execute {
-//            //TODO
-//        }
     }
 
     @Throws(IOException::class)
@@ -182,7 +181,7 @@ abstract class Cybertron(private val project: Project, private val classEditor: 
      */
     @Throws(IOException::class)
     private fun getEditedClassByteArray(inputStream: InputStream, fullQualifiedClassName: String): ByteArray? {
-        return classEditor.getEditedClassByteArray(this, inputStream, fullQualifiedClassName)
+        return classEditor?.getEditedClassByteArray(this, inputStream, fullQualifiedClassName)
     }
 
 }
