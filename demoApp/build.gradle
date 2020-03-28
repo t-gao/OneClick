@@ -64,7 +64,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation project(':LibDemoModule')
+    implementation project(':demoModule')
 
     implementation project(':OneClickLib')
 

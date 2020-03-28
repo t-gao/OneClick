@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="me.tangni.libdemomodule">
+
+    <application>
+        <activity android:name=".LibKotlinActivity" android:label="Module Kotlin Activity" />
+        <activity android:name=".LibModuleActivity" android:label="Module Java Activity" />
+    </application>
+
+</manifest>

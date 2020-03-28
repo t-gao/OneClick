@@ -1,5 +1,5 @@
 rootProject.name='OneClick'
-include ':OneClickDemo'
+include ':demoApp'
 include ':OneClickLib'
 include ':OneClickGradlePlugin'
-include ':LibDemoModule'
+include ':demoModule'
